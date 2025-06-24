@@ -1,39 +1,49 @@
-# <h1 align="center"> Forge Template </h1>
+# CrownFund Smart Contract
 
-**Template repository for getting started quickly with Foundry projects**
+CrownFund is a simple crowdfunding smart contract written in Solidity. It allows users to create fundraising campaigns, donate to campaigns, and retrieve campaign and donation information.
 
-![Github Actions](https://github.com/foundry-rs/forge-template/workflows/CI/badge.svg)
+## Features
 
-## Getting Started
+- **Create Campaigns:** Anyone can create a new campaign with a title, description, target amount, deadline, and image.
+- **Donate to Campaigns:** Users can donate ETH to any campaign.
+- **Track Donators:** Each campaign keeps track of all donators and their donation amounts.
+- **Retrieve Campaigns:** Fetch all campaigns and their details.
 
-Click "Use this template" on [GitHub](https://github.com/foundry-rs/forge-template) to create a new repository with this repo as the initial state.
+## Contract Overview
 
-Or, if your repo already exists, run:
-```sh
-forge init
-forge build
-forge test
-```
+### Campaign Structure
 
-## Writing your first test
+Each campaign contains:
 
-All you need is to `import forge-std/Test.sol` and then inherit it from your test contract. Forge-std's Test contract comes with a pre-instatiated [cheatcodes environment](https://book.getfoundry.sh/cheatcodes/), the `vm`. It also has support for [ds-test](https://book.getfoundry.sh/reference/ds-test.html)-style logs and assertions. Finally, it supports Hardhat's [console.log](https://github.com/brockelmore/forge-std/blob/master/src/console.sol). The logging functionalities require `-vvvv`.
+- `owner`: Address of the campaign creator
+- `title`: Title of the campaign
+- `description`: Description of the campaign
+- `target`: Target fundraising amount (in wei)
+- `deadline`: Campaign deadline (timestamp)
+- `donators`: List of addresses who donated
+- `amountCollected`: Total amount collected (in wei)
+- `image`: Image URL or IPFS hash
+- `donations`: List of donation amounts
 
-```solidity
-pragma solidity 0.8.10;
+### Main Functions
 
-import "forge-std/Test.sol";
+- `createCapaign(address _owner, string _title, string _description, uint256 _target, uint256 _deadline, string _image)`: Creates a new campaign. Returns the campaign ID.
+- `donateToCampaign(uint256 _id)`: Donate ETH to a campaign by ID.
+- `getDonators(uint256 _id)`: Returns the list of donators and their donation amounts for a campaign.
+- `getCampaign()`: Returns all campaigns.
 
-contract ContractTest is Test {
-    function testExample() public {
-        vm.roll(100);
-        console.log(1);
-        emit log("hi");
-        assertTrue(true);
-    }
-}
-```
+## Usage
 
-## Development
+1. **Deploy the contract** to an Ethereum-compatible network.
+2. **Create a campaign** by calling `createCapaign` with the required parameters.
+3. **Donate** to a campaign by calling `donateToCampaign` and sending ETH.
+4. **View donators** and **campaigns** using `getDonators` and `getCampaign`.
 
-This project uses [Foundry](https://getfoundry.sh). See the [book](https://book.getfoundry.sh/getting-started/installation.html) for instructions on how to install and use Foundry.
+## Notes
+
+- The contract does not include advanced features like refunds or campaign completion checks.
+- The deadline check in `createCapaign` currently requires the deadline to be in the past, which may be a bug (should be `> block.timestamp`).
+
+## License
+
+This project is licensed under the Unlicense.
