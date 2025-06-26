@@ -4,6 +4,7 @@ import { navlinks } from "../Constants";
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+import CustomButton from "./CustomButton";
 function Navbar() {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
@@ -30,13 +31,12 @@ function Navbar() {
       </div>
       <div className="sm:flex hidden flex-row justify-end gap-4">
         {address && (
-          <button
-            type="button"
-            className={`font-epilogue font-semibold text-[16px] leading-[26px] text-white min-h-[52px] px-4 rounded-[10px] bg-[#8c6dfd]`}
+          <CustomButton
+            type={"button"}
+            style={"bg-[#8c6dfd]"}
+            title={"Create Campaign"}
             onClick={handleClick}
-          >
-            Create Campaign
-          </button>
+          />
         )}
         <ConnectButton showBalance={false} />
         <Link to={"/profile"}>
@@ -105,13 +105,12 @@ function Navbar() {
 
           <div className="flex mx-4 mb-4">
             {address && (
-              <button
-                type="button"
-                className={`font-epilogue font-semibold text-[16px] leading-[26px] text-white min-h-[52px] px-4 rounded-[10px] bg-[#8c6dfd]`}
+              <CustomButton
+                type={"button"}
+                style={"bg-[#8c6dfd]"}
+                title={"Create Campaign"}
                 onClick={handleClick}
-              >
-                Create Campaign
-              </button>
+              />
             )}
           </div>
           <div className="flex mx-4">
