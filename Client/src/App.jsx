@@ -4,6 +4,8 @@ import "./App.css";
 import Home from "./Pages/Home";
 import Sidebar from "./Components/Sidebar";
 import Navbar from "./Components/Navbar";
+import Profile from "./Pages/Profile";
+import CreateCampaign from "./Pages/CreateCampaign";
 
 function App() {
   return (
@@ -13,10 +15,13 @@ function App() {
       </div>
       <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
         <Navbar />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="create-campaign" element={<CreateCampaign/>}/>
+        </Routes>
       </div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
     </div>
   );
 }
