@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormField from "../Components/FormField";
 import { money } from "../assets";
 import CustomButton from "../Components/CustomButton";
-
+import { CrownFundContext } from "../Context/CrownFund";
+import { parseEther } from "viem";
+import { checkIfImage } from "../utils";
+import { toast } from "sonner";
 function CreateCampaign() {
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
@@ -15,12 +18,24 @@ function CreateCampaign() {
     image: "",
   });
   const navigate = useNavigate();
+  const { createCampaign } = useContext(CrownFundContext);
   const handleFormFieldChange = (name, e) => {
     setForm({ ...form, [name]: e.target.value });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    checkIfImage(form.image, async (exists) => {
+      if (exists) {
+        setIsLoading(true);
+        await createCampaign({ ...form, target: parseEther(form.target) });
+        setIsLoading(false);
+        navigate("/");
+      } else {
+        // toast.error("Please provide Valid Image");
+        console.log("Please provide Valid Image");
+        setForm({ ...form, image: "" });
+      }
+    });
   };
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">

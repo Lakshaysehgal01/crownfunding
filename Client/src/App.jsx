@@ -6,10 +6,12 @@ import Sidebar from "./Components/Sidebar";
 import Navbar from "./Components/Navbar";
 import Profile from "./Pages/Profile";
 import CreateCampaign from "./Pages/CreateCampaign";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <div className="realtive sm:-8 p-4 flex flex-row min-h-screen bg-[#13131a] ">
+      <Toaster />
       <div className="sm:flex hidden mr-10 relative">
         <Sidebar />
       </div>
@@ -19,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="create-campaign" element={<CreateCampaign/>}/>
+          <Route path="create-campaign" element={<CreateCampaign />} />
         </Routes>
       </div>
     </div>
