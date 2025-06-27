@@ -18,8 +18,21 @@ contract CrownFund {
 
     uint256 public TotalNoOfCampaigns=0;
 
-    function createCapaign(address _owner,string memory _title,string memory _description,uint256 _target ,uint256 _deadline,string memory _image)public returns(uint256){
-        require(_deadline<block.timestamp,"The deadline should be a date in the future");
+    event CampaignCreated(
+    address indexed owner,
+    uint256 campaignId,
+    string title,
+    uint256 target,
+    uint256 deadline
+    );
+
+    event Donation(
+        address indexed donator,
+        uint256  amount
+    );
+
+    function createCampaign(address _owner,string memory _title,string memory _description,uint256 _target ,uint256 _deadline,string memory _image)public returns(uint256){
+        require(_deadline>block.timestamp,"The deadline should be a date in the future");
         Campaign storage campaign=campaigns[TotalNoOfCampaigns];
         campaign.title=_title;
         campaign.description=_description;
@@ -28,7 +41,7 @@ contract CrownFund {
         campaign.amountCollected=0;
         campaign.owner=_owner;
         TotalNoOfCampaigns++;
-
+        emit CampaignCreated(_owner, TotalNoOfCampaigns-1, _title, _target, _deadline);
         return TotalNoOfCampaigns-1;
     }
     function donateToCampaign(uint256 _id)public payable{
@@ -38,6 +51,7 @@ contract CrownFund {
         campaign.donators.push(msg.sender);
         campaign.donations.push(amount);
         payable(campaign.owner).transfer(amount);
+        emit Donation(msg.sender, msg.value);
     }
     function getDonators(uint256 _id)public view returns(address[] memory,uint256[] memory ){
         return (campaigns[_id].donators,campaigns[_id].donations);
