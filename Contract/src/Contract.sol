@@ -40,6 +40,7 @@ contract CrownFund {
         campaign.target=_target;
         campaign.amountCollected=0;
         campaign.owner=_owner;
+        campaign.deadline=_deadline;
         TotalNoOfCampaigns++;
         emit CampaignCreated(_owner, TotalNoOfCampaigns-1, _title, _target, _deadline);
         return TotalNoOfCampaigns-1;

@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { toast } from "sonner";
 import { Abi } from "../utils/ABI";
-const ContarctAddress = import.meta.env.VITE_CONTARCT_ADDRESS;
+const ContractAddress = import.meta.env.VITE_CONTARCT_ADDRESS;
 export const CrownFundContext = createContext();
 
 export const CrownFundProvider = ({ children }) => {
@@ -12,7 +12,7 @@ export const CrownFundProvider = ({ children }) => {
     console.log("before tx");
     try {
       const tx = await writeContractAsync({
-        address: ContarctAddress,
+        address: ContractAddress,
         abi: Abi,
         functionName: "createCampaign",
         args: [
@@ -29,6 +29,7 @@ export const CrownFundProvider = ({ children }) => {
       toast.error(e);
     }
   };
+
   return (
     <CrownFundContext.Provider
       value={{
@@ -38,4 +39,12 @@ export const CrownFundProvider = ({ children }) => {
       {children}
     </CrownFundContext.Provider>
   );
+};
+
+export const useCampaigns = () => {
+  return useReadContract({
+    address: ContractAddress,
+    abi: Abi,
+    functionName: "getCampaign",
+  });
 };
