@@ -22,7 +22,6 @@ function Home() {
         image: campaign.image,
         pId: id,
       }));
-      console.log(parseData);
       setCampaigns(parseData);
       setLoading(false);
     }

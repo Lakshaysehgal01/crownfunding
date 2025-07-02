@@ -1,12 +1,69 @@
-# React + Vite
+# CrownFund Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern crowdfunding DApp built with React, Vite, Tailwind CSS, and wagmi, enabling users to create, view, and fund campaigns on Ethereum-compatible networks.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Create Campaigns:** Start a new fundraising campaign with a title, description, target amount, deadline, and image.
+- **View Campaigns:** Browse all campaigns or filter by your own profile.
+- **Fund Campaigns:** Donate ETH to campaigns directly from the UI.
+- **Campaign Details:** View campaign progress, story, donators, and contribute.
+- **Wallet Integration:** Connect your wallet using RainbowKit and interact with smart contracts via wagmi.
+- **Live Feedback:** Get instant feedback on actions with toast notifications.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React 19**
+- **Vite** for fast development
+- **Tailwind CSS** for styling
+- **wagmi** & **viem** for Ethereum contract interaction
+- **RainbowKit** for wallet connection
+- **React Router** for navigation
+- **Sonner** for notifications
+
+## Project Structure
+
+- `src/Components/` – UI components (Navbar, Sidebar, FundCard, etc.)
+- `src/Pages/` – Main pages (Home, CreateCampaign, Campaign-detail, Profile)
+- `src/Context/CrownFund.jsx` – Context provider for contract actions
+- `src/utils/` – Utility functions and ABI
+- `src/config/` – wagmi and network config
+
+## How It Works
+
+- **Campaigns** are stored on-chain via the CrownFund smart contract.
+- Users can **create** and **fund** campaigns from the UI.
+- All campaign and donation data is fetched live from the blockchain.
+
+## Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Set up environment:**
+   - Create a `.env` file with your contract address:
+     ```env
+     VITE_CONTARCT_ADDRESS=your_contract_address_here
+     ```
+3. **Run the app:**
+   ```bash
+   npm run dev
+   ```
+4. **Connect your wallet** and start using the DApp!
+
+## Scripts
+
+- `npm run dev` – Start development server
+- `npm run build` – Build for production
+- `npm run lint` – Lint code
+- `npm run preview` – Preview production build
+
+## Notes
+
+- Make sure your wallet is connected to the correct network.
+- The contract address must match the deployed CrownFund contract.
+
+## License
+
+This project is licensed under the Unlicense.
