@@ -213,7 +213,7 @@ contract Bar {
 }
 ```
 
-### `console.log`
+### ``
 
 Usage follows the same format as [Hardhat](https://hardhat.org/hardhat-network/reference/#console-log):
 ```solidity

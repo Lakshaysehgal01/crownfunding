@@ -1,15 +1,24 @@
-import { createContext, useContext } from "react";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { createContext, useEffect, useState } from "react";
+import {
+  useAccount,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { toast } from "sonner";
 import { Abi } from "../utils/ABI";
+import { parseEther } from "viem";
+import { waitForTransactionReceipt } from "viem/actions";
+import { config, publicClient } from "../config/wagmi.js";
+import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 const ContractAddress = import.meta.env.VITE_CONTARCT_ADDRESS;
 export const CrownFundContext = createContext();
 
 export const CrownFundProvider = ({ children }) => {
   const { writeContractAsync } = useWriteContract();
   const { address } = useAccount();
+  const addRecentTransaction = useAddRecentTransaction();
   const createCampaign = async (form) => {
-    console.log("before tx");
     try {
       const tx = await writeContractAsync({
         address: ContractAddress,
@@ -24,9 +33,43 @@ export const CrownFundProvider = ({ children }) => {
           form.image,
         ],
       });
-      console.log(tx);
+      await waitForTransactionReceipt(publicClient, {
+        hash: tx,
+        confirmations: 1,
+      });
+      addRecentTransaction({
+        hash: tx,
+        description: "Transaction to create a campaign",
+      });
+      toast.success("Campaign Created");
+      return true;
     } catch (e) {
-      toast.error(e);
+      toast.error("Failed to create a Campaign");
+      return false;
+    }
+  };
+
+  const donateToCampaign = async (id, amount) => {
+    try {
+      const tx = await writeContractAsync({
+        address: ContractAddress,
+        abi: Abi,
+        functionName: "donateToCampaign",
+        args: [id],
+        value: parseEther(amount),
+      });
+      await waitForTransactionReceipt(publicClient, {
+        hash: tx,
+        confirmations: 1,
+      });
+      addRecentTransaction({
+        hash: tx,
+        description: "Transaction to donate to a campaign",
+      });
+      return true;
+    } catch (e) {
+      toast.error("Error occured while donating");
+      return false;
     }
   };
 
@@ -34,6 +77,7 @@ export const CrownFundProvider = ({ children }) => {
     <CrownFundContext.Provider
       value={{
         createCampaign,
+        donateToCampaign,
       }}
     >
       {children}
@@ -46,5 +90,13 @@ export const useCampaigns = () => {
     address: ContractAddress,
     abi: Abi,
     functionName: "getCampaign",
+  });
+};
+export const useDonators = (id) => {
+  return useReadContract({
+    address: ContractAddress,
+    abi: Abi,
+    functionName: "getDonators",
+    args: [id],
   });
 };

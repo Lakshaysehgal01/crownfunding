@@ -52,6 +52,7 @@ contract CrownFund {
         campaign.donators.push(msg.sender);
         campaign.donations.push(amount);
         payable(campaign.owner).transfer(amount);
+        campaign.amountCollected+=amount;
         emit Donation(msg.sender, msg.value);
     }
     function getDonators(uint256 _id)public view returns(address[] memory,uint256[] memory ){

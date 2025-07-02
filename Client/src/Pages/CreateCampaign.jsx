@@ -7,6 +7,8 @@ import { CrownFundContext } from "../Context/CrownFund";
 import { parseEther } from "viem";
 import { checkIfImage } from "../utils";
 import { toast } from "sonner";
+import Loader from "../Components/Loader";
+import { useAccount } from "wagmi";
 function CreateCampaign() {
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
@@ -17,6 +19,7 @@ function CreateCampaign() {
     deadline: "",
     image: "",
   });
+  const { address } = useAccount();
   const navigate = useNavigate();
   const { createCampaign } = useContext(CrownFundContext);
   const handleFormFieldChange = (name, e) => {
@@ -24,6 +27,10 @@ function CreateCampaign() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!address) {
+      toast.info("Please Connect Wallet");
+      return;
+    }
     checkIfImage(form.image, async (exists) => {
       if (exists) {
         setIsLoading(true);
@@ -31,15 +38,14 @@ function CreateCampaign() {
         setIsLoading(false);
         navigate("/");
       } else {
-        // toast.error("Please provide Valid Image");
-        console.log("Please provide Valid Image");
+        toast.error("Please provide Valid Image");
         setForm({ ...form, image: "" });
       }
     });
   };
   return (
     <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
-      {isLoading && "Loader .."}
+      {isLoading && <Loader />}
       <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-[#3a3a43] rounded-[10px]">
         <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white">
           Start a Campaign
@@ -87,7 +93,7 @@ function CreateCampaign() {
           <FormField
             labelName="Goal *"
             placeholder="ETH 0.50"
-            inputType="text"
+            inputType="number"
             value={form.target}
             handleChange={(e) => handleFormFieldChange("target", e)}
           />

@@ -7,6 +7,7 @@ import Navbar from "./Components/Navbar";
 import Profile from "./Pages/Profile";
 import CreateCampaign from "./Pages/CreateCampaign";
 import { Toaster } from "sonner";
+import CampaignDetail from "./Pages/Campaign-detail";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="create-campaign" element={<CreateCampaign />} />
+          <Route path="campaign-details/:id" element={<CampaignDetail />} />
         </Routes>
       </div>
     </div>
